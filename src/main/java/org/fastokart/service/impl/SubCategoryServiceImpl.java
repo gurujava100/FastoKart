@@ -19,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
 
@@ -69,5 +71,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         SubCategory saved = subCategoryRepository.save(subCategory);
 
         return mapper.toResponse(saved);
+    }
+       public List<SubCategory> getAllSubCategory() {
+        return subCategoryRepository.findAll();
     }
 }

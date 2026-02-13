@@ -9,8 +9,16 @@ public class ProductRequest {
     private double price;
     private boolean active ;
     private MultipartFile imageFile;
+    private Long subCategoryId;
 
-    // -------- GETTERS & SETTERS --------
+    public Long getSubCategoryId() {
+        return subCategoryId;
+    }
+
+    public void setSubCategoryId(Long subCategoryId) {
+        this.subCategoryId = subCategoryId;
+    }
+// -------- GETTERS & SETTERS --------
 
     public String getName() {
         return name;
