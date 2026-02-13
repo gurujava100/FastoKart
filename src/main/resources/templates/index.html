@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop | Products</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #f8f9fa; }
+        .product-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <a class="navbar-brand" href="/">MyShop</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products">Product</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <!-- Heading + Search -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>All Category</h3> <h3>All Products</h3>
+        <form action="/" method="get" class="d-flex">
+            <input type="text" name="keyword" class="form-control me-2" placeholder="Search product">
+            <button class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="row">
+
+        <!-- Categories Sidebar -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    Categories
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                          th:each="cat : ${categories}">
+                    <a th:href="@{'/?category=' + ${cat.id}}"
+                       class="text-decoration-none text-dark"
+                       th:text="${cat.name}">
+                        Category
+                    </a>
+                </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="col-md-9">
+            <div class="row">
+
+                <div class="col-md-4 mb-4"
+                     th:each="product : ${products}"
+                     th:if="${products != null and !products.isEmpty()}">
+
+                    <div class="card product-card shadow-sm h-100">
+
+                        <img th:src="@{'/api/products/image/' + ${product.imageName}}"
+                             class="card-img-top"
+                             alt="product">
+
+                        <div class="card-body text-center">
+                            <h6 class="card-title" th:text="${product.name}"></h6>
+
+                            <p class="text-muted mb-2">
+                                ₹ <span th:text="${product.price}"></span>
+                            </p>
+
+                            <a th:href="@{'/product/' + ${product.id}}"
+                               class="btn btn-sm btn-primary">
+                                View
+                            </a>
+
+                            <a th:href="@{'/cart/add/' + ${product.id}}"
+                               class="btn btn-sm btn-outline-success">
+                                Add to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- Demo -->
+            <div class="col-md-9">
+                <div class="row">
+
+                    <!-- Product 1 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card shadow-sm h-100">
+                            <img src="https://via.placeholder.com/300x200"
+                                 class="card-img-top" alt="product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">iPhone 14</h6>
+                                <p class="text-muted mb-2">₹ 79,999</p>
+                                <a href="#" class="btn btn-sm btn-primary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card shadow-sm h-100">
+                            <img src="https://via.placeholder.com/300x200"
+                                 class="card-img-top" alt="product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Samsung Galaxy S23</h6>
+                                <p class="text-muted mb-2">₹ 69,999</p>
+                                <a href="#" class="btn btn-sm btn-primary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card shadow-sm h-100">
+                            <img src="https://via.placeholder.com/300x200"
+                                 class="card-img-top" alt="product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Sony Headphones</h6>
+                                <p class="text-muted mb-2">₹ 12,999</p>
+                                <a href="#" class="btn btn-sm btn-primary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card shadow-sm h-100">
+                            <img src="https://via.placeholder.com/300x200"
+                                 class="card-img-top" alt="product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Apple Watch</h6>
+                                <p class="text-muted mb-2">₹ 41,999</p>
+                                <a href="#" class="btn btn-sm btn-primary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card shadow-sm h-100">
+                            <img src="https://via.placeholder.com/300x200"
+                                 class="card-img-top" alt="product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Dell Laptop</h6>
+                                <p class="text-muted mb-2">₹ 58,999</p>
+                                <a href="#" class="btn btn-sm btn-primary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card shadow-sm h-100">
+                            <img src="https://via.placeholder.com/300x200"
+                                 class="card-img-top" alt="product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Bluetooth Speaker</h6>
+                                <p class="text-muted mb-2">₹ 3,499</p>
+                                <a href="#" class="btn btn-sm btn-primary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Pagination -->
+    <nav th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center mt-4">
+
+            <li class="page-item"
+                th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{'/?page=' + ${currentPage - 1}}">
+                    Previous
+                </a>
+            </li>
+
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link"
+                   th:href="@{'/?page=' + ${i}}"
+                   th:text="${i + 1}">
+                </a>
+            </li>
+
+            <li class="page-item"
+                th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{'/?page=' + ${currentPage + 1}}">
+                    Next
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
