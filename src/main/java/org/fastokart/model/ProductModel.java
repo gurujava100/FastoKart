@@ -16,6 +16,17 @@ public class ProductModel {
     private boolean isActive;
 
     private String imageName;   // ✅ store filename only
+    @ManyToOne
+    @JoinColumn(name = "sub_category_id")
+    private SubCategory subCategory;
+
+    public SubCategory getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
+    }
 
     // getters & setters
     public Long getId() {
