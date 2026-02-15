@@ -11,8 +11,8 @@ import java.util.List;
 public interface CategoryService {
 
     CategoryResponse saveCategory(CategoryRequest request,MultipartFile image);
-    public List<CategoryModel> getActiveCategories();
-    public List<CategoryModel> getAllCategory();
+            public List<CategoryModel> getActiveCategories();
+    List<CategoryResponse> getAllCategories();
     public void deleteCategory(Long id);
     CategoryModel updateCategory(Long id, CategoryModel category);
     public CategoryModel getCategoryById(Long id);

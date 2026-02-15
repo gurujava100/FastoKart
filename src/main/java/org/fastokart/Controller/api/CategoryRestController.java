@@ -37,8 +37,8 @@ public class CategoryRestController {
 
     // ✅ GET ALL
     @GetMapping
-    public ResponseEntity<List<CategoryModel>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategory());
+    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     // ✅ GET BY ID

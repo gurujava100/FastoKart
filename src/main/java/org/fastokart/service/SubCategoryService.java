@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface SubCategoryService {
     SubCategoryResponse save(SubCategoryRequest request);
-    public List<SubCategory> getAllSubCategory();
+    public List<SubCategoryResponse> getAllSubCategory();
+    //List<SubCategoryResponse> getAll();
 }

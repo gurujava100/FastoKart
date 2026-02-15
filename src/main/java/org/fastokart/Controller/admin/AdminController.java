@@ -1,5 +1,6 @@
 package org.fastokart.Controller.admin;
 
+import org.fastokart.dto.CategoryResponse;
 import org.fastokart.model.CategoryModel;
 import org.fastokart.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class AdminController {
     @GetMapping("/subcategories")
     public String subCategoryPage(Model model) {
 
-          List<CategoryModel> categories = categoryService.getAllCategory();
+          List<CategoryResponse> categories = categoryService.getAllCategories();
           model.addAttribute("categories", categories);
 
           return "admin/sub_category";

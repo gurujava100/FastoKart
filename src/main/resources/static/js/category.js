@@ -169,8 +169,8 @@ function loadAllCategories() {
                            <td>${cat.name}</td>
 
                            <td>
-                               <span class="badge ${cat.isActive ? 'bg-success' : 'bg-secondary'}">
-                                   ${cat.isActive ? 'Active' : 'Inactive'}
+                               <span class="badge ${cat.active ? 'bg-success' : 'bg-secondary'}">
+                                   ${cat.active ? 'Active' : 'Inactive'}
                                </span>
                            </td>
                            <td>

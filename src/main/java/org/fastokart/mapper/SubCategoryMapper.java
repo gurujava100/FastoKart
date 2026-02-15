@@ -16,7 +16,8 @@ public class SubCategoryMapper {
         return SubCategoryResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .imageUrl("/uploads/subcategories/" + entity.getImageName())
+                .imageUrl("/api/subcategories/image/" + entity.getImageName())
+
                 .isActive(entity.getActive())
                 .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getName())

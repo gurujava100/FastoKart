@@ -72,7 +72,14 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         return mapper.toResponse(saved);
     }
-       public List<SubCategory> getAllSubCategory() {
-        return subCategoryRepository.findAll();
+
+    @Override
+    public List<SubCategoryResponse> getAllSubCategory() {
+
+           return subCategoryRepository.findAll()
+                .stream()
+                   .map(mapper::toResponse)
+                .toList();
     }
+
 }

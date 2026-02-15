@@ -64,9 +64,18 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryModel> getActiveCategories() {
         return categoryRepository.findByIsActiveTrue();
     }
+   @Override
+    public List<CategoryResponse> getAllCategories() {
+        List<CategoryModel> categories = categoryRepository.findAll();
 
-    public List<CategoryModel>getAllCategory() {
-        return categoryRepository.findAll();
+        return categories.stream().map(cat -> {
+            CategoryResponse res = new CategoryResponse();
+            res.setId(cat.getId());
+            res.setName(cat.getName());
+            res.setActive(cat.getActive());
+            res.setImageName(cat.getImageName());
+            return res;
+        }).toList();
     }
     @Override
     public CategoryModel getCategoryById(Long id) {

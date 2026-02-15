@@ -1,5 +1,6 @@
 package org.fastokart.Controller.admin;
 
+import org.fastokart.dto.SubCategoryResponse;
 import org.fastokart.model.CategoryModel;
 import org.fastokart.model.SubCategory;
 import org.fastokart.service.CategoryService;
@@ -20,7 +21,7 @@ public class ProductPageController {
     @GetMapping("/")
     public String page(Model model)
     {
-        List<SubCategory> categories = subCategoryService.getAllSubCategory();
+        List<SubCategoryResponse> categories = subCategoryService.getAllSubCategory();
         model.addAttribute("categories", categories);
 
         return "admin/product";

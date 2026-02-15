@@ -18,8 +18,6 @@ public class CategoryModel {
 
     private String imageName;
 
-
-
     private Boolean isActive=true;
     @OneToMany(mappedBy = "category",
             cascade = CascadeType.ALL,
