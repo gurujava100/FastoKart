@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,22 +23,31 @@ public class CheckoutController {
     @Autowired
     private OrderService orderService;
     @Autowired
-    ProductService productService;
+    private ProductService productService;
     @PostMapping("/place-order")
     @ResponseBody
-    public Long placeOrder(HttpSession session){
+    public Long placeOrder(
+            @RequestParam String name,
+            @RequestParam String phone,
+            @RequestParam String address,
+            @RequestParam String city,
+            @RequestParam String pincode,
+            @RequestParam String paymentMethod,
+            HttpSession session){
 
         BuyNowItem item = (BuyNowItem) session.getAttribute("BUY_NOW");
 
         if(item == null){
-            throw new RuntimeException("Session expired");
+            return -1L;
         }
 
-        OrderModel order =  orderService.createDirectOrder(item,
-                "Guest User",
-                "9999999999",
-                "Default Address",
-                "COD");
+        OrderModel order = orderService.createDirectOrder(
+                item,
+                name,
+                phone,
+                address + ", " + city + " - " + pincode,
+                paymentMethod
+        );
 
         session.removeAttribute("BUY_NOW");
 
