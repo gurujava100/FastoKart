@@ -14,20 +14,15 @@ public class OrderSuccessController {
     private OrderRepository orderRepository;
 
     @GetMapping("/order-success/{id}")
-    public String orderSuccess(@PathVariable("id") Long id, Model model) {
+    public String orderSuccess(@PathVariable Long id, Model model) {
 
-        // fetch order from DB
         OrderModel order = orderRepository.findById(id).orElse(null);
 
-        // protection (invalid id typed manually in URL)
         if(order == null){
             return "redirect:/";
         }
 
         model.addAttribute("order", order);
-        model.addAttribute("orderId", order.getId());
-        model.addAttribute("amount", order.getTotalAmount());
-
         return "user/order_success";
     }
 }
