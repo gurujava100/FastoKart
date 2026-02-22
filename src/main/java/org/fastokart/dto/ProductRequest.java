@@ -6,10 +6,30 @@ public class ProductRequest {
 
     private String name;
     private String description;
+
     private double price;
-    private boolean active ;
+    //private double discountPercent;
+    private int stock;
+
+    private boolean active;
     private MultipartFile imageFile;
     private Long subCategoryId;
+
+    /*public double getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(double discountPercent) {
+        this.discountPercent = discountPercent;
+    }*/
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 
     public Long getSubCategoryId() {
         return subCategoryId;

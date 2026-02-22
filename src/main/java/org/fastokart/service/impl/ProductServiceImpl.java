@@ -8,15 +8,20 @@ import org.fastokart.model.ProductModel;
 import org.fastokart.repository.ProductRepository;
 import org.fastokart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -60,6 +65,7 @@ public class ProductServiceImpl   implements ProductService {
             }
         }
     }
+
     @Override
     public List<ProductResponse> getAllProducts() {
 
@@ -91,5 +97,28 @@ public class ProductServiceImpl   implements ProductService {
         }
 
         productRepository.deleteById(id);
+    }
+
+    public List<ProductModel> searchProducts(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return productRepository
+                .findByNameContainingIgnoreCaseOrderByNameAsc(keyword);
+    }
+
+    public List<ProductModel> getSuggestions(String keyword) {
+        return productRepository.findTop5ByNameContainingIgnoreCaseOrderByNameAsc(keyword);
+   /* @Override
+    public List<ProductModel> getBySubcategory(Long subCategoryId) {
+        return productRepository.findBySubCategoryId(subCategoryId);
+    }*/
+    }
+
+    @Override
+    public ProductModel getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 }

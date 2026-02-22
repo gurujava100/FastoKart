@@ -5,11 +5,41 @@ public class ProductResponse {
     private Long id;
     private String name;
     private String description;
+
     private double price;
-    private boolean active;   // ✅ changed here
+   // private double discountPercent;
+    private double discountPrice;
+
+    private int stock;
+    private boolean active;
+
     private String imageName;
     private String subCategoryName;
     private String categoryName;
+
+   /* public double getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(double discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+*/
+   /* public double getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(double discountPrice) {
+        this.discountPrice = discountPrice;
+    }*/
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 
     public String getSubCategoryName() {
         return subCategoryName;

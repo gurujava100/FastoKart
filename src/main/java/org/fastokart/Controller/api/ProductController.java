@@ -1,5 +1,6 @@
 package org.fastokart.Controller.api;
 
+import org.fastokart.model.ProductModel;
 import org.springframework.core.io.Resource;
 import org.fastokart.dto.CategoryRequest;
 import org.fastokart.dto.CategoryResponse;
@@ -83,4 +84,18 @@ public ResponseEntity<Resource> getProductImage(@PathVariable String fileName) {
                productService.deleteProduct(id);
                return ResponseEntity.ok().build();
     }
+    // Search API
+    @GetMapping("/search")
+    public List<ProductModel> searchProducts(@RequestParam("q") String query) {
+        return productService.searchProducts(query);
+    }
+
+    @GetMapping("/suggestions")
+    public List<ProductModel> suggestions(@RequestParam("q") String keyword){
+        return productService.getSuggestions(keyword);
+    }
+   /* @GetMapping("/subcategory/{id}")
+    public List<ProductModel> getBySubcategory(@PathVariable Long id) {
+        return productService.getBySubcategory(id);
+    }*/
 }
