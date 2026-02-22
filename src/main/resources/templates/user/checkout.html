@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;margin:0}
+        .container{max-width:1100px;margin:40px auto;display:grid;grid-template-columns:1.3fr .7fr;gap:25px}
+        .card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+        h2{margin:0 0 15px}
+        label{font-size:13px;font-weight:600}
+        input,textarea,select{width:100%;padding:10px;margin:6px 0 14px;border-radius:8px;border:1px solid #ddd}
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .product{display:flex;gap:15px;align-items:center}
+        .product img{width:90px;height:90px;border-radius:10px;object-fit:cover}
+        .price{font-size:22px;font-weight:700;color:#28a745}
+        .summary div{display:flex;justify-content:space-between;margin:10px 0}
+        .btn{background:#ffb300;border:none;color:#000;padding:14px;width:100%;border-radius:40px;font-weight:700;cursor:pointer;font-size:16px}
+        .btn:hover{background:#ffa000}
+        .success{display:none;text-align:center;color:green;font-weight:700;margin-top:15px}
+        @media(max-width:900px){.container{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="card">
+        <h2>Delivery Details</h2>
+        <form id="checkoutForm">
+            <div class="row">
+                <div>
+                    <label>Full Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="text" name="phone" required>
+                </div>
+            </div>
+            <label>Address</label>
+            <textarea name="address" required></textarea>
+            <div class="row">
+                <div>
+                    <label>City</label>
+                    <input type="text" name="city" required>
+                </div>
+                <div>
+                    <label>Pincode</label>
+                    <input type="text" name="pincode" required>
+                </div>
+            </div>
+            <label>Payment Method</label>
+            <select name="paymentMethod">
+                <option value="COD">Cash on Delivery</option>
+                <option value="ONLINE">Online Payment</option>
+            </select>
+            <button class="place-btn" onclick="placeOrder()">Place Order</button>
+            <div class="success" id="successMsg">Order placed successfully!</div>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Order Summary</h2>
+        <div class="product">
+            <img th:src="@{'/api/products/image/' + ${product.imageName}}">
+            <div>
+                <div th:text="${product.name}">Product Name</div>
+                <div class="price">₹<span th:text="${product.price}">0</span></div>
+            </div>
+        </div>
+        <hr>
+        <div class="summary">
+            <div>
+                <span>Subtotal</span>
+                <span>₹<span th:text="${product.price * qty}">0</span></span>
+            </div>
+
+            <div>
+                <span>Delivery</span>
+                <span>₹50</span>
+            </div>
+
+            <div>
+                <strong>Total</strong>
+                <strong>₹<span th:text="${total + 50}">0</span></strong>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/js/order.js}"></script>
+</body>
+</html>

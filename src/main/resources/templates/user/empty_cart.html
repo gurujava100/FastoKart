@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cart Empty</title>
+</head>
+<body>
+
+<h2 style="text-align:center;margin-top:60px;">
+    Your cart is empty 🛒
+
+</h2>
+<tr th:each="item : ${items}">
+    <td th:text="${item.product.name}"></td>
+    <td th:text="${item.price}"></td>
+    <td th:text="${item.quantity}"></td>
+    <td th:text="${item.price * item.quantity}"></td>
+</tr>
+
+<a href="/" style="display:block;text-align:center;margin-top:20px;">
+    Continue Shopping
+</a>
+
+</body>
+</html>

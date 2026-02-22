@@ -242,3 +242,47 @@ function deleteProduct(id) {
                       alert("Error deleting product");
                   });
                 }
+//LOAD  CHECKOUT PAGE
+function buyNow(btn){
+           alert("hi checkout"+btn);
+ /*   fetch(`/api/checkout/buy/${productId}`, {
+        method: "POST"
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data === "READY"){
+            window.location.href = "/checkout";
+        }
+    })
+    .catch(err => alert("Error starting checkout"));*/
+}
+function checkoutCart(){
+alert("welcome to checkouut");
+   /* fetch(`/api/checkout/cart`,{
+        method:"POST"
+    })
+    .then(res=>res.text())
+    .then(data=>{
+        if(data==="READY"){
+            window.location.href="/checkout";
+        }else{
+            alert("Cart is empty");
+        }
+    })
+    .catch(()=> alert("Server error"));*/
+}
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof loadCart === "function") {
+        loadCart();
+    }
+});
+//BY NOW FUNCTION
+function buyProduct(id){
+    fetch("/api/buy-now/" + id, { method: "POST" })
+       .then(res => res.json())
+       .then(data => {
+           if(data.success){
+              window.location.href = "/checkout";   // ← ONLY THIS
+           }
+       });
+}

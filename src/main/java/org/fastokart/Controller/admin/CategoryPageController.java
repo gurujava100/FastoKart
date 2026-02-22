@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/categories")
 public class CategoryPageController {
 
-    private final CategoryService categoryService;
-
-    public CategoryPageController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
     @GetMapping("/")
     public String page() {
         return "admin/category";

@@ -9,42 +9,62 @@ import org.springframework.stereotype.Component;
 @Component
     public class ProductMapper {
 
-        // Convert Product entity to ProductResponse DTO
-        public ProductResponse toResponse(ProductModel product) {
-            if (product == null) return null;
+    public ProductResponse toResponse(ProductModel product) {
+        ProductResponse res = new ProductResponse();
 
-            ProductResponse response = new ProductResponse();
-            response.setId(product.getId());
-            response.setName(product.getName());
-            response.setDescription(product.getDescription());
-            response.setPrice(product.getPrice());
-            response.setActive(product.isActive());
-           response.setImageName(product.getImageName());
-            return response;
+        res.setId(product.getId());
+        res.setName(product.getName());
+        res.setDescription(product.getDescription());
+        res.setPrice(product.getPrice());
+       // res.setDiscountPercent(product.getDiscountPercent());
+       // res.setDiscountPrice(product.getDiscountPrice());
+        res.setStock(product.getStock());
+        res.setActive(product.isActive());
+        res.setImageName(product.getImageName());
+
+        if(product.getSubCategory()!=null){
+            res.setSubCategoryName(product.getSubCategory().getName());
+            res.setCategoryName(product.getSubCategory().getCategory().getName());
         }
 
-        // Convert ProductRequest DTO to Product entity
-        public ProductModel toEntity(ProductRequest request) {
-            if (request == null) return null;
+        return res;
+    }
 
-            ProductModel product =new ProductModel();
-            product.setName(request.getName());
-            product.setDescription(request.getDescription());
-            product.setPrice(request.getPrice());
-            product.setActive(request.isActive());
-                              //product.setImageName(request.getImageFile());
-            return product;
-        }
+    // REQUEST -> ENTITY
+    public ProductModel toEntity(ProductRequest req) {
 
-        // Update existing Product entity from ProductRequest
-        public void updateEntity(ProductModel product, ProductRequest request) {
-            if (product == null || request == null) return;
+        ProductModel product = new ProductModel();
 
-            product.setName(request.getName());
-            product.setDescription(request.getDescription());
-            product.setPrice(request.getPrice());
-            product.setActive(request.isActive());
-           // product.setImageName(request.getImageFile());
-        }
+        product.setName(req.getName());
+        product.setDescription(req.getDescription());
+        product.setPrice(req.getPrice());
+        //product.setDiscountPercent(req.getDiscountPercent());
+        product.setStock(req.getStock());
+        product.setActive(req.isActive());
+
+        // ⭐ calculate selling price
+      /*  double discountPrice =
+                req.getPrice() - (req.getPrice() * req.getDiscountPercent() / 100);
+
+        product.setDiscountPrice(discountPrice);*/
+
+        return product;
+    }
+    // UPDATE EXISTING PRODUCT
+    public void updateEntity(ProductModel product, ProductRequest req) {
+
+        product.setName(req.getName());
+        product.setDescription(req.getDescription());
+        product.setPrice(req.getPrice());
+       // product.setDiscountPercent(req.getDiscountPercent());
+        product.setStock(req.getStock());
+        product.setActive(req.isActive());
+
+        // recalculate price
+       /* double discountPrice =
+                req.getPrice() - (req.getPrice() * req.getDiscountPercent() / 100);
+
+        product.setDiscountPrice(discountPrice);*/
+    }
     }
 

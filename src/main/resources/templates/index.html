@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -7,32 +6,81 @@
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
         body { background-color: #f8f9fa; }
+
+        .navbar-custom{
+            background-color:#2874f0;   /* Flipkart blue */
+        }
+        .navbar-custom .nav-link,
+        .navbar-custom .navbar-brand{
+            color:white !important;
+        }
+        .navbar-custom .nav-link:hover{
+            color:#ffe500 !important;   /* yellow hover like ecommerce */
+        }
+
+        /* Product card images */
         .product-card img {
             height: 200px;
             object-fit: cover;
         }
+
+        /* Horizontal scrollable categories */
+        .category-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+        .category-row::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        .category-row { scrollbar-width: none; } /* Firefox */
+
+        .category-item {
+            flex-shrink: 0;
+            width: 100px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column; /* Image above text */
+            align-items: center;
+        }
+        .category-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .category-item span {
+            margin-top: 0.3rem;
+            font-size: 0.9rem;
+        }
+
     </style>
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
-
         <a class="navbar-brand" href="/">MyShop</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/products">Product</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
         </ul>
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+            <li class="nav-item me-3">
+                <a class="nav-link d-flex align-items-center gap-1 text-nowrap" href="/cart">
+                    <div class="position-relative">
+                        <i class="bi bi-cart3 fs-5"></i>
+                        <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </div>
+                    <span>Cart</span>
+                </a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
         </ul>
     </div>
@@ -42,199 +90,75 @@
 
     <!-- Heading + Search -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>All Category</h3> <h3>All Products</h3>
-        <form action="/" method="get" class="d-flex">
-            <input type="text" name="keyword" class="form-control me-2" placeholder="Search product">
-            <button class="btn btn-outline-primary">Search</button>
+        <h3>All Products</h3>
+        <form action="/search_result" method="get" class="search-box position-relative" style="width:300px;">
+            <div class="input-group">
+                <input type="text" id="searchInput" name="q" class="form-control" placeholder="Search for products..." autocomplete="off">
+                <button class="btn btn-primary" type="submit">🔍</button>
+            </div>
+            <div id="suggestions" class="list-group position-absolute w-100 shadow bg-white" style="z-index:1000;"></div>
         </form>
     </div>
 
-    <div class="row">
-
-        <!-- Categories Sidebar -->
-        <div class="col-md-3">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-dark text-white">
-                    Categories
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"
-                          th:each="cat : ${categories}">
-                    <a th:href="@{'/?category=' + ${cat.id}}"
-                       class="text-decoration-none text-dark"
-                       th:text="${cat.name}">
-                        Category
-                    </a>
-                </li>
-                </ul>
-            </div>
+    <!-- Horizontal Categories Row -->
+    <div class="mb-4">
+        <h5 class="mb-2">Categories</h5>
+        <div class="category-row">
+            <a th:each="cat : ${categories}" th:href="@{'/?category=' + ${cat.id}}" class="category-item">
+                <!-- Use th:if / th:unless for fallback image -->
+                <img th:if="${cat.imageName != null}" th:src="@{'/api/categories/image/' + ${cat.imageName}}" alt="Category Image">
+                <img th:unless="${cat.imageName != null}" th:src="@{'/assets/n.jpg'}" alt="Default Image">
+                <span th:text="${cat.name}"></span>
+            </a>
         </div>
+    </div>
 
-        <!-- Products Section -->
-        <div class="col-md-9">
+    <!-- Products Section -->
+    <div class="row">
+        <div class="row">
             <div class="row">
-
-                <div class="col-md-4 mb-4"
+                <div class="col-6 col-sm-6 col-md-3 mb-4"
                      th:each="product : ${products}"
                      th:if="${products != null and !products.isEmpty()}">
 
-                    <div class="card product-card shadow-sm h-100">
-
+                    <div class="card h-100 text-center">
                         <img th:src="@{'/api/products/image/' + ${product.imageName}}"
                              class="card-img-top"
-                             alt="product">
+                             alt="product"
+                             style="height:150px; object-fit:contain;" />
 
-                        <div class="card-body text-center">
-                            <h6 class="card-title" th:text="${product.name}"></h6>
-
-                            <p class="text-muted mb-2">
+                        <div class="card-body p-2">
+                            <h6 class="card-title" th:text="${product.name}" style="font-size:0.9rem;"></h6>
+                            <p class="text-muted mb-2" style="font-size:0.85rem;">
                                 ₹ <span th:text="${product.price}"></span>
                             </p>
-
-                            <a th:href="@{'/product/' + ${product.id}}"
-                               class="btn btn-sm btn-primary">
-                                View
-                            </a>
-
-                            <a th:href="@{'/cart/add/' + ${product.id}}"
-                               class="btn btn-sm btn-outline-success">
-                                Add to Cart
-                            </a>
+                            <a th:href="@{'/product/'+ ${product.id}}" class="btn btn-sm btn-primary mb-1">View</a>
+                            <button class="btn btn-sm btn-outline-success" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
                         </div>
                     </div>
-                </div>
-
-
-            </div>
-            <!-- Demo -->
-            <div class="col-md-9">
-                <div class="row">
-
-                    <!-- Product 1 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/300x200"
-                                 class="card-img-top" alt="product">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">iPhone 14</h6>
-                                <p class="text-muted mb-2">₹ 79,999</p>
-                                <a href="#" class="btn btn-sm btn-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 2 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/300x200"
-                                 class="card-img-top" alt="product">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">Samsung Galaxy S23</h6>
-                                <p class="text-muted mb-2">₹ 69,999</p>
-                                <a href="#" class="btn btn-sm btn-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 3 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/300x200"
-                                 class="card-img-top" alt="product">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">Sony Headphones</h6>
-                                <p class="text-muted mb-2">₹ 12,999</p>
-                                <a href="#" class="btn btn-sm btn-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 4 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/300x200"
-                                 class="card-img-top" alt="product">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">Apple Watch</h6>
-                                <p class="text-muted mb-2">₹ 41,999</p>
-                                <a href="#" class="btn btn-sm btn-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 5 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/300x200"
-                                 class="card-img-top" alt="product">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">Dell Laptop</h6>
-                                <p class="text-muted mb-2">₹ 58,999</p>
-                                <a href="#" class="btn btn-sm btn-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 6 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/300x200"
-                                 class="card-img-top" alt="product">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">Bluetooth Speaker</h6>
-                                <p class="text-muted mb-2">₹ 3,499</p>
-                                <a href="#" class="btn btn-sm btn-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-success">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- Pagination -->
     <nav th:if="${totalPages > 1}">
         <ul class="pagination justify-content-center mt-4">
-
-            <li class="page-item"
-                th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{'/?page=' + ${currentPage - 1}}">
-                    Previous
-                </a>
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{'/?page=' + ${currentPage - 1}}">Previous</a>
             </li>
-
-            <li class="page-item"
-                th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link"
-                   th:href="@{'/?page=' + ${i}}"
-                   th:text="${i + 1}">
-                </a>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{'/?page=' + ${i}}" th:text="${i + 1}"></a>
             </li>
-
-            <li class="page-item"
-                th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{'/?page=' + ${currentPage + 1}}">
-                    Next
-                </a>
+            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{'/?page=' + ${currentPage + 1}}">Next</a>
             </li>
-
         </ul>
     </nav>
 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
 </body>
 </html>
