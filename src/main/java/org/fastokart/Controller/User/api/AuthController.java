@@ -1,5 +1,6 @@
 package org.fastokart.Controller.User.api;
 
+import org.fastokart.dto.UserLoginDTO;
 import org.fastokart.dto.UserRegisterDTO;
 import org.fastokart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,9 @@ public class AuthController {
 
         userService.register(dto);
         return "User Registered Successfully";
+    }
+    @PostMapping("/login")
+    public String login(@RequestBody UserLoginDTO dto) {
+        return userService.login(dto);
     }
 }
