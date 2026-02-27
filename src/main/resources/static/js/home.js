@@ -264,3 +264,14 @@ alert("checkout clicked");
          suggestionsBox.innerHTML = "";
      }
  });
+
+ //BY NOW FUNCTION
+ function buyProduct(id){
+     fetch("/api/buy-now/" + id, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+               window.location.href = "/checkout";   // ← ONLY THIS
+            }
+        });
+ }
