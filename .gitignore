@@ -1,10 +1,25 @@
+# ===============================
+# Spring Boot / Maven
+# ===============================
 HELP.md
 target/
-.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# ===============================
+# IntelliJ IDEA
+# ===============================
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ===============================
+# STS / Eclipse
+# ===============================
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +28,9 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+# ===============================
+# NetBeans
+# ===============================
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,14 +40,17 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# ===============================
+# VS Code
+# ===============================
 .vscode/
-uploads/
-uploads/products/
-uploads/subcategories/
 
-# image files
-*.jpg
-*.jpeg
-*.png
-*.webp
+# ===============================
+# Upload folder (dynamic images only)
+# ===============================
+uploads/
+
+# ===============================
+# Logs
+# ===============================
+*.log
