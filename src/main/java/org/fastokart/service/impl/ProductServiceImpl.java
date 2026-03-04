@@ -9,6 +9,7 @@ import org.fastokart.repository.ProductRepository;
 import org.fastokart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -120,5 +121,27 @@ public class ProductServiceImpl   implements ProductService {
     public ProductModel getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+    }
+    @Override
+    public Page<ProductModel> getAllActiveProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByIsActiveTrue(pageable);
+    }
+
+    // ✅ Get products by Category (IMPORTANT FIXED METHOD)
+    @Override
+    public Page<ProductModel> getProductsByCategoryId(
+            Long id,
+            int page,
+            int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return productRepository
+                .findBySubCategory_Category_IdAndIsActiveTrue(id, pageable);
+    }
+    @Override
+    public boolean existsByNameIgnoreCase(String name) {
+        return productRepository.existsByNameIgnoreCase(name);
     }
 }

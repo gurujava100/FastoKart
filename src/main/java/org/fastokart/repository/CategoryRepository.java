@@ -1,6 +1,8 @@
 package org.fastokart.repository;
 
 import org.fastokart.model.CategoryModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,4 +12,5 @@ public interface CategoryRepository extends JpaRepository<CategoryModel, Long> {
 
     boolean existsByNameIgnoreCase(String name);
     List<CategoryModel> findByIsActiveTrue();
+    Page<CategoryModel> findByIsActiveTrue(Pageable pageable);
 }

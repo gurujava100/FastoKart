@@ -4,15 +4,19 @@ import jakarta.servlet.http.HttpSession;
 import org.fastokart.dto.BuyNowItem;
 import org.fastokart.model.Cart;
 import org.fastokart.model.CartItem;
+import org.fastokart.model.CategoryModel;
 import org.fastokart.model.ProductModel;
 import org.fastokart.repository.ProductRepository;
 import org.fastokart.service.CartService;
+import org.fastokart.service.CategoryService;
 import org.fastokart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -27,6 +31,8 @@ public class UserPageController {
          private CartService cartService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
     @GetMapping("/cart")
 
     public String viewCartPage() {
@@ -79,5 +85,37 @@ public class UserPageController {
         model.addAttribute("total", total);
 
         return "user/checkout";
+    }
+    @GetMapping("/login")
+    public String loginPage() {
+        return "user/login";   // login.html
+    }
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "user/register";
+    }
+    @GetMapping("/index")
+    public String index(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) Long category,
+            Model model) {
+
+        int productSize = 6;
+
+        Page<ProductModel> productPage = (category != null)
+                ? productService.getProductsByCategoryId(category, page, productSize)
+                : productService.getAllActiveProducts(page, productSize);
+
+        // Debug (remove later in production)
+        System.out.println("Total Elements: " + productPage.getTotalElements());
+        System.out.println("Total Pages: " + productPage.getTotalPages());
+
+        model.addAttribute("categories", categoryService.getAllCategories());
+
+        // ✅ Instead of passing many attributes, pass full Page object
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("selectedCategory", category);
+
+        return "user/Home";
     }
 }

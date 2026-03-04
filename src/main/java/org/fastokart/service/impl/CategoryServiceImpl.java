@@ -9,6 +9,8 @@ import org.fastokart.model.CategoryModel;
 import org.fastokart.repository.CategoryRepository;
 import org.fastokart.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -100,5 +102,12 @@ public class CategoryServiceImpl implements CategoryService {
         existing.setIsActive(updatedData.getIsActive());
 
         return categoryRepository.save(existing);
+    }
+    @Override
+    public Page<CategoryModel> getActiveCategoriesPagination(int page, int size) {
+
+        return categoryRepository.findByIsActiveTrue(
+                PageRequest.of(page, size)
+        );
     }
     }

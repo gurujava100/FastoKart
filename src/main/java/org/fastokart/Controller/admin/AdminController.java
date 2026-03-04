@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
-    private    CategoryService categoryService;
+    private CategoryService categoryService;
     @GetMapping("/")
     public String Index()
     {

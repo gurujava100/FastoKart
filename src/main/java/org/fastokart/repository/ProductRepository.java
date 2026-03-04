@@ -18,8 +18,16 @@ public interface ProductRepository extends JpaRepository<ProductModel, Long> {
 
     // suggestions dropdown
     List<ProductModel> findTop5ByNameContainingIgnoreCaseOrderByNameAsc(String keyword);
-    ///@Query("SELECT p.name FROM ProductModel p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) ORDER BY p.name ASC")
+    //@Query("SELECT p.name FROM ProductModel p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) ORDER BY p.name ASC")
    // List<String> findTop5Names(@Param("keyword") String keyword, Pageable pageable);
+    Page<ProductModel> findByIsActiveTrue(Pageable pageable);
+
+    // products by category (CORRECT ✅)
+    Page<ProductModel> findBySubCategory_Category_IdAndIsActiveTrue(
+            Long id,
+            Pageable pageable
+    );
+    boolean existsByNameIgnoreCase(String name);
 }
 
 
