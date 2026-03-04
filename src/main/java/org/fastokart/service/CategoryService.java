@@ -11,11 +11,13 @@ import java.util.List;
 public interface CategoryService {
 
     CategoryResponse saveCategory(CategoryRequest request,MultipartFile image);
-            public List<CategoryModel> getActiveCategories();
+    public List<CategoryModel> getActiveCategories();
+    Page<CategoryModel> getActiveCategoriesPagination(int page, int size);
     List<CategoryResponse> getAllCategories();
     public void deleteCategory(Long id);
     CategoryModel updateCategory(Long id, CategoryModel category);
     public CategoryModel getCategoryById(Long id);
+
     //List<CategoryResponse> getAllCategories();
     /*public Boolean existCategory(String name);
 

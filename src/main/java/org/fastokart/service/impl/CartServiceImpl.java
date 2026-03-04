@@ -3,9 +3,11 @@ package org.fastokart.service.impl;
 import jakarta.transaction.Transactional;
 import org.fastokart.model.Cart;
 import org.fastokart.model.CartItem;
+import org.fastokart.model.CategoryModel;
 import org.fastokart.model.ProductModel;
 import org.fastokart.repository.CartItemRepository;
 import org.fastokart.repository.CartRepository;
+import org.fastokart.repository.CategoryRepository;
 import org.fastokart.repository.ProductRepository;
 import org.fastokart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,10 @@ import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
-
+     @Autowired
+    private CategoryRepository categoryRepository;
     @Autowired
     private CartRepository cartRepository;
-
     @Autowired
     private CartItemRepository cartItemRepository;
 
@@ -119,5 +121,7 @@ public class CartServiceImpl implements CartService {
         }
         return getCart(cartId);
     }
-
+    public List<CategoryModel> getAllCategories() {
+        return categoryRepository.findAll();
+    }
 }
