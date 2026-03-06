@@ -98,6 +98,7 @@ public class UserPageController {
     public String index(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Long category,
+            @RequestParam(required = false) Long userId,
             Model model) {
 
         int productSize = 6;
@@ -109,13 +110,14 @@ public class UserPageController {
         // Debug (remove later in production)
         System.out.println("Total Elements: " + productPage.getTotalElements());
         System.out.println("Total Pages: " + productPage.getTotalPages());
+        System.out.println("Total Pages: " + userId);
 
         model.addAttribute("categories", categoryService.getAllCategories());
 
         // ✅ Instead of passing many attributes, pass full Page object
         model.addAttribute("productPage", productPage);
         model.addAttribute("selectedCategory", category);
-
+        model.addAttribute("userId", userId);
         return "user/Home";
     }
 }
