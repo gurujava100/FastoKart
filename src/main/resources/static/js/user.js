@@ -1,5 +1,4 @@
 function loginUser() {
-
     let email = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
@@ -10,28 +9,21 @@ function loginUser() {
 
     fetch("/auth/login", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            email: email,
-            password: password
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password })
     })
-    .then(response => response.text())
+    .then(res => res.json())
     .then(data => {
-
-        if (data === "LOGIN_SUCCESS") {
+        if (data.status === "LOGIN_SUCCESS") {
             alert("Login Successful");
-            window.location.href = "/index";
+
+            // Pass userId in URL
+            window.location.href = "/index?userId=" + data.userId;
         } else {
             alert("Invalid Credentials");
         }
-
     })
-    .catch(error => {
-        console.error("Error:", error);
-    });
+    .catch(err => console.error(err));
 }
 //Register
   function registerUser() {

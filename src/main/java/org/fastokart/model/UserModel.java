@@ -1,70 +1,55 @@
 package org.fastokart.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private  String name;
+
+    // Personal Info
+    @Column(nullable = false)
+    private String name;
+
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true)
     private String phone;
 
+    // Authentication
+    @Column(nullable = false)
     private String password;
 
+    private String role = "USER";
+
+    private boolean active = true;
+
+    // Verification
+    private boolean emailVerified = false;
+    private boolean phoneVerified = false;
+
+    private String profileImageUrl;
+
     private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt;
 
-    public String getName() {
-        return name;
+    @PreUpdate
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AddressModel> addresses;
 }
