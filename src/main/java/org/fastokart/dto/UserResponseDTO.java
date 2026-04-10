@@ -5,7 +5,7 @@ public class UserResponseDTO {
     private String name;
     private String email;
     private String phone;
-
+    private String profileImageUrl;
     public Long getId() {
         return id;
     }
@@ -37,4 +37,7 @@ public class UserResponseDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    public String getProfileImageUrl() { return profileImageUrl; }
+    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+
 }
