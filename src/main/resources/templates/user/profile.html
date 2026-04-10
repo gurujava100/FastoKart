@@ -47,6 +47,25 @@
             font-weight:500;
         }
 
+
+
+         #toast {
+             visibility: hidden;
+             min-width: 250px;
+             background-color: #333;
+             color: #fff;
+             text-align: center;
+             border-radius: 5px;
+             padding: 12px;
+             position: fixed;
+             bottom: 30px;
+             left: 50%;
+             transform: translateX(-50%);
+         }
+        #toast.show {
+            visibility: visible;
+        }
+
     </style>
 </head>
 
@@ -65,9 +84,9 @@
         <div class="card-body text-center">
 
             <!-- Profile Image -->
-            <img th:src="${profile.profileImageUrl}"
+            <img th:src="@{${profile.profileImageUrl}}"
                  class="profile-photo"
-                 onerror="this.src='/images/default-user.png'">
+                 onerror="this.src='/images/default-user.png'"/>
 
             <h5 class="mt-3" th:text="${profile.name}">User Name</h5>
             <p class="text-muted" th:text="${profile.email}">email@example.com</p>
@@ -94,49 +113,18 @@
                     <input type="text" th:field="*{phone}" class="form-control">
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-update">
-                    Update Profile
-                </button>
-
+                <button type="button" onclick="updateProfile()">Update</button>
+                <button type="button" onclick="updateProfile()">Account Setting</button>
+                <p id="message"></p>
             </form>
 
         </div>
 
     </div>
-
+    <div id="toast"></div>
 </div>
 
-<script>
-
-    function updateProfile(event) {
-
-        event.preventDefault();
-
-        const form = document.getElementById('profileForm');
-        const userId = form.querySelector('input[name="userId"]').value;
-
-        const dto = {
-            name: form.querySelector('input[name="name"]').value,
-            email: form.querySelector('input[name="email"]').value,
-            phone: form.querySelector('input[name="phone"]').value
-        };
-
-        fetch('/my-account/profile-update?userId=' + userId,{
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(dto)
-        })
-        .then(res=>res.text())
-        .then(msg=>{
-            alert(msg);
-        })
-        .catch(err=>console.error(err));
-
-    }
-
-</script>
+<script th:src="@{/js/user.js}"></script>
 
 </body>
 </html>

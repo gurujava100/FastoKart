@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Addresses</title>
+</head>
+<body>
+<h2>My Addresses</h2>
+
+<a th:href="@{/my-account/address/add-page}">Add New Address</a>
+<h1>Address Page Working ✅</h1>
+<!--
+<div th:if="${addresses.isEmpty()}">
+    <p>No addresses found. Add your first address!</p>
+</div>
+
+<div th:each="addr : ${addresses}">
+    <h3 th:text="${addr.name} + ' ' + (${addr.default} ? '(Default)' : '')"></h3>
+    <p th:text="${addr.fullName} + ' - ' + ${addr.phone}"></p>
+    <p th:text="${addr.fullAddress} + ', ' + ${addr.landmark} + ', ' + ${addr.city} + ', ' + ${addr.state} + ' - ' + ${addr.pincode}"></p>
+    <hr/>
+</div>-->
+</body>
+</html>

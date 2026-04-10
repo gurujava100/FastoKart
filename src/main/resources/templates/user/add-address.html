@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Address</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 450px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .checkbox input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #message {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Add New Address</h2>
+
+    <div id="message"></div>
+
+    <form id="addressForm">
+        <label>Full Name
+            <input type="text" name="fullName" required>
+        </label>
+
+        <label>Phone
+            <input type="text" name="phone" required>
+        </label>
+
+        <label>Label (Home/Office)
+            <input type="text" name="name" required>
+        </label>
+
+        <label>City
+            <input type="text" name="city" required>
+        </label>
+
+        <label>State
+            <input type="text" name="state" required>
+        </label>
+
+        <label>Pincode
+            <input type="text" name="pincode" required>
+        </label>
+
+        <label>Landmark
+            <input type="text" name="landmark">
+        </label>
+
+        <label>Full Address
+            <input type="text" name="fullAddress" required>
+        </label>
+
+        <div class="checkbox">
+            <input type="checkbox" name="default">
+            <span>Set as Default Address</span>
+        </div>
+
+        <button type="button" onclick="submitAddress()">Add Address</button>
+    </form>
+</div>
+
+<script th:src="@{/js/user.js}"></script>
+
+</body>
+</html>

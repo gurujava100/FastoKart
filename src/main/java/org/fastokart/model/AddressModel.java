@@ -17,20 +17,16 @@ public class AddressModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
-
     private String phone;
-
-    private String addressLine1;
-    private String addressLine2;
+    private String name;
     private String city;
     private String state;
-    private String country;
     private String pincode;
+    private String landmark;
+    private String fullAddress;
 
-    private boolean isDefault = false;
+    private boolean isDefault;
 
-    // Relationship
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     private UserModel user;
 }

@@ -2,11 +2,9 @@ package org.fastokart.Controller.User;
 
 import jakarta.servlet.http.HttpSession;
 import org.fastokart.dto.BuyNowItem;
-import org.fastokart.model.Cart;
-import org.fastokart.model.CartItem;
-import org.fastokart.model.CategoryModel;
-import org.fastokart.model.ProductModel;
+import org.fastokart.model.*;
 import org.fastokart.repository.ProductRepository;
+import org.fastokart.service.AddressService;
 import org.fastokart.service.CartService;
 import org.fastokart.service.CategoryService;
 import org.fastokart.service.ProductService;
@@ -119,5 +117,31 @@ public class UserPageController {
         model.addAttribute("selectedCategory", category);
         model.addAttribute("userId", userId);
         return "user/Home";
+    }
+
+    @GetMapping("/my-account/address/add-page")
+    public String addAddressPage(HttpSession session) {
+       /* UserModel user = (UserModel) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }*/
+        return "user/add-address"; // Thymeleaf template: add-address.html
+    }
+
+    @Autowired
+    private AddressService addressService;
+
+    @GetMapping("/account/addresses")
+    public String addressesPage(Model model, HttpSession session) {
+        UserModel user = (UserModel) session.getAttribute("user");
+
+       /* if (user == null) {
+            return "redirect:/login"; // redirect if not logged in
+        }*/
+
+        // Fetch all addresses for the user
+        // model.addAttribute("addresses", addressService.getAllAddresses(user));
+
+        return "user/address"; // Thymeleaf template name: address.html
     }
 }

@@ -1,16 +1,16 @@
 package org.fastokart.service;
 
-import org.fastokart.dto.ProfileResponseDTO;
-import org.fastokart.dto.UserLoginDTO;
-import org.fastokart.dto.UserRegisterDTO;
+import org.fastokart.dto.*;
 import org.fastokart.model.UserModel;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     // register new user
-    void register(UserRegisterDTO dto);
+    UserModel register(UserRegisterDTO dto, MultipartFile image);
     UserModel login(UserLoginDTO dto);
     ProfileResponseDTO getProfile(Long userId);
-
+    UserResponseDTO updateProfile(Long userId,UpdateProfileDTO dto);
+    UserModel getUserById(Long id);
     // Edit Profile (name, phone, email)
    // ProfileResponseDTO updateProfile(Long userId, ProfileUpdateDTO dto);
 
