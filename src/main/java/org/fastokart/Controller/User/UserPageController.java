@@ -1,6 +1,7 @@
 package org.fastokart.Controller.User;
 
 import jakarta.servlet.http.HttpSession;
+import org.fastokart.dto.AddressResponseDTO;
 import org.fastokart.dto.BuyNowItem;
 import org.fastokart.model.*;
 import org.fastokart.repository.ProductRepository;
@@ -133,15 +134,18 @@ public class UserPageController {
 
     @GetMapping("/account/addresses")
     public String addressesPage(Model model, HttpSession session) {
-        UserModel user = (UserModel) session.getAttribute("user");
+       // UserModel user = (UserModel) session.getAttribute("user");
+        Long userId = (Long) session.getAttribute("userId");
 
-       /* if (user == null) {
-            return "redirect:/login"; // redirect if not logged in
-        }*/
+        if (userId == null) {
+            return "redirect:/login";
+        }
 
-        // Fetch all addresses for the user
-        // model.addAttribute("addresses", addressService.getAllAddresses(user));
+        List<AddressResponseDTO> addresses =
+                addressService. getAllAddresses(userId);
 
+        // Send to UI
+        model.addAttribute("addresses", addresses);
         return "user/address"; // Thymeleaf template name: address.html
     }
 }

@@ -8,16 +8,25 @@
 
 <a th:href="@{/my-account/address/add-page}">Add New Address</a>
 <h1>Address Page Working ✅</h1>
-<!--
-<div th:if="${addresses.isEmpty()}">
-    <p>No addresses found. Add your first address!</p>
+<div th:if="${#lists.isEmpty(addresses)}">
+    <p>No addresses found</p>
 </div>
+<div class="address-box" th:each="addr : ${addresses}">
 
-<div th:each="addr : ${addresses}">
-    <h3 th:text="${addr.name} + ' ' + (${addr.default} ? '(Default)' : '')"></h3>
-    <p th:text="${addr.fullName} + ' - ' + ${addr.phone}"></p>
-    <p th:text="${addr.fullAddress} + ', ' + ${addr.landmark} + ', ' + ${addr.city} + ', ' + ${addr.state} + ' - ' + ${addr.pincode}"></p>
-    <hr/>
-</div>-->
+<h4 th:text="${addr.name}"></h4>
+
+<p th:text="${addr.fullAddress}"></p>
+
+<p>
+    <span th:text="${addr.city}"></span>,
+    <span th:text="${addr.state}"></span> -
+    <span th:text="${addr.pincode}"></span>
+</p>
+
+<span th:if="${addr.isDefault}" style="color: green;">
+        Default
+    </span>
+
+</div>
 </body>
 </html>

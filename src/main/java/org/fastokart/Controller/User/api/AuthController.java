@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import org.springframework.ui.Model;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -22,7 +22,8 @@ public class AuthController {
     @PostMapping("/register")
     public String register(  @ModelAttribute UserRegisterDTO dto,
                              @RequestParam(value = "image", required = false) MultipartFile image,
-                             HttpSession session) {   // ✅ Inject HttpSession
+                             HttpSession session,
+                             Model model) {   // ✅ Inject HttpSession
 
         // Save the user
         UserModel savedUser = userService.register(dto, image);
