@@ -10,6 +10,8 @@ import org.fastokart.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
@@ -29,5 +31,13 @@ public class AddressServiceImpl implements AddressService {
         AddressModel saved = addressRepository.save(address);
 
         return AddressMapper.toDTO(saved);
+    }
+    public List<AddressResponseDTO> getAllAddresses(Long userId) {
+
+        List<AddressModel> addresses = addressRepository.findByUserId(userId);
+
+        return addresses.stream()
+                .map(AddressMapper::toDTO)
+                .toList();
     }
 }

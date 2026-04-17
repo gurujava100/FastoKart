@@ -23,14 +23,10 @@ public class AddressController {
     public ResponseEntity<?> addAddress(@RequestBody AddressRequestDTO dto, HttpSession session) {
 
         UserModel user = (UserModel) session.getAttribute("user");
-        if (user == null) {
-            user = new UserModel();
-            user.setId(1L); // default user ID, must exist in DB
-            user.setName("Demo User");
-        }
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login required");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Login required");
         }
 
 
