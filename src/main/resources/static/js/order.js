@@ -1,31 +1,25 @@
 function placeOrder(){
 
-    const form = document.getElementById("checkoutForm");
-    const formData = new FormData(form);
+    const addressId = document.getElementById("selectedAddressId").value;
+    const paymentMethod = document.getElementById("paymentMethod").value;
+
+    console.log("Sending addressId:", addressId);
+
+    if(!addressId || addressId === "undefined"){
+        alert("Address not loaded. Please refresh or select address.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("addressId", addressId);
+    formData.append("paymentMethod", paymentMethod);
 
     fetch("/place-order", {
         method: "POST",
         body: formData
     })
-    .then(response => {
-        if(!response.ok){
-            throw new Error("Server error");
-        }
-        return response.text();
-    })
-    .then(orderId => {
-
-        orderId = Number(orderId);
-
-        if(orderId === -1){
-            window.location.href = "/session-expired";
-            return;
-        }
-
-        window.location.href = "/order-success/" + orderId;
-    })
-    .catch(err=>{
-        alert("Order failed");
-        console.error(err);
-    });
+        .then(res => res.text())
+        .then(orderId => {
+            window.location.href = "/order-success/" + orderId;
+        });
 }

@@ -50,4 +50,23 @@ public class AddressServiceImpl implements AddressService {
                 .map(AddressMapper::toDTO)
                 .toList();
     }
+    @Override
+    public AddressResponseDTO getDefaultAddress(Long userId) {
+
+        AddressModel address = addressRepository
+                .findByUserIdAndIsDefaultTrue(userId)
+                .orElseThrow(() -> new RuntimeException("Default address not found"));
+
+        return AddressMapper.toDTO(address);
+    }
+
+    @Override
+    public AddressResponseDTO getAddressById(Long addressId) {
+
+        AddressModel address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        return AddressMapper.toDTO(address);
+    }
+
 }
