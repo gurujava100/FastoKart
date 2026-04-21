@@ -7,7 +7,7 @@ import org.fastokart.model.UserModel;
 import java.util.List;
 
 public interface AddressService {
-    AddressResponseDTO addAddress(AddressRequestDTO dto, UserModel user);
+    AddressResponseDTO addAddress(AddressRequestDTO dto,  Long userId);
 
      List<AddressResponseDTO> getAllAddresses(Long userId);
 
