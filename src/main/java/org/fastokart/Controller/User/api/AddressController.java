@@ -22,15 +22,15 @@ public class AddressController {
     @PostMapping("add")
     public ResponseEntity<?> addAddress(@RequestBody AddressRequestDTO dto, HttpSession session) {
 
-        UserModel user = (UserModel) session.getAttribute("user");
+        Long userId = (Long) session.getAttribute("userId");
 
-        if (user == null) {
+        if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Login required");
         }
 
+        AddressResponseDTO saved = addressService.addAddress(dto, userId);
 
-        AddressResponseDTO saved = addressService. addAddress(dto,user);
         return ResponseEntity.ok(saved);
     }
 }

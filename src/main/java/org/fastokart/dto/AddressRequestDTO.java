@@ -8,6 +8,15 @@ public class AddressRequestDTO {
     private String state;
     private String fullAddress;
     private String landmark;
+    private boolean isDefault;
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
 
     public String getName() {
         return name;

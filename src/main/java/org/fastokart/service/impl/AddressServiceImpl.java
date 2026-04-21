@@ -19,12 +19,22 @@ public class AddressServiceImpl implements AddressService {
 
     // ✅ Add Address
     @Override
-    public AddressResponseDTO addAddress(AddressRequestDTO dto, UserModel user) {
+    public AddressResponseDTO addAddress(AddressRequestDTO dto, Long userId) {
+
+        // 🔹 Create lightweight user object
+        UserModel user = new UserModel();
+        user.setId(userId);
 
         AddressModel address = AddressMapper.toEntity(dto, user);
 
-        // first address → default
+        // 🔥 RULE 1: First address → default
         if (addressRepository.countByUser(user) == 0) {
+            address.setDefault(true);
+        }
+
+        // 🔥 RULE 2: If user selects default → reset old default
+        if (dto.isDefault()) {
+            addressRepository.resetDefaultAddresses(userId);
             address.setDefault(true);
         }
 

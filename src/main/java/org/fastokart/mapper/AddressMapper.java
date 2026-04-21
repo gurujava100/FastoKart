@@ -21,6 +21,7 @@ public class AddressMapper {
     }
     // Entity → Response DTO
     public static AddressResponseDTO toDTO(AddressModel address) {
+
         AddressResponseDTO dto = new AddressResponseDTO();
         dto.setId(address.getId());
         dto.setName(address.getName());
@@ -31,6 +32,7 @@ public class AddressMapper {
         dto.setFullAddress(address.getFullAddress());
         dto.setLandmark(address.getLandmark());
         dto.setDefault(address.isDefault());
+
         return dto;
     }
 }
