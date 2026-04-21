@@ -18,7 +18,7 @@ public interface AddressRepository extends JpaRepository<AddressModel, Long> {
 
     // Count addresses
     long countByUser(UserModel user);
-
+  Optional<AddressModel> findByUserIdAndIsDefaultTrue(Long userId);
     // Reset default addresses
     @Modifying
     @Transactional

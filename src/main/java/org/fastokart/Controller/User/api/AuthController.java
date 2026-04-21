@@ -36,23 +36,25 @@ public class AuthController {
     public Map<String, Object> login(@RequestBody UserLoginDTO dto,
                                      HttpSession session) {
 
+
         UserModel user = userService.login(dto);
 
+        Map<String, Object> resp = new HashMap<>();
+
         if (user == null) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("status", "LOGIN_FAILED");
-            error.put("message", "Invalid email or password");
-            return error;
+            resp.put("status", "LOGIN_FAILED");
+            resp.put("message", "Invalid email or password");
+            return resp;
         }
 
-        // ✅ Set session after login
-        session.setAttribute("userId", user.getId());
+        // ✅ FIXED KEY
+        session.setAttribute("USER_ID", user.getId());
 
-        // Prepare response
-        Map<String, Object> resp = new HashMap<>();
         resp.put("status", "LOGIN_SUCCESS");
         resp.put("userId", user.getId());
-    return resp;
+
+
+        return resp;
     }
 
 }

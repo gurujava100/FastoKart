@@ -5,8 +5,6 @@ import org.fastokart.model.OrderModel;
 
 public interface OrderService {
     OrderModel createDirectOrder(BuyNowItem item,
-                                 String name,
-                                 String phone,
-                                 String address,
+                                 Long addressId,
                                  String payment);
 }

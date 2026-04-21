@@ -26,14 +26,9 @@ public class CheckoutController {
     private ProductService productService;
     @PostMapping("/place-order")
     @ResponseBody
-    public Long placeOrder(
-            @RequestParam String name,
-            @RequestParam String phone,
-            @RequestParam String address,
-            @RequestParam String city,
-            @RequestParam String pincode,
-            @RequestParam String paymentMethod,
-            HttpSession session){
+    public Long placeOrder(  @RequestParam Long addressId,
+                             @RequestParam String paymentMethod,
+                             HttpSession session){
 
         BuyNowItem item = (BuyNowItem) session.getAttribute("BUY_NOW");
 
@@ -43,9 +38,7 @@ public class CheckoutController {
 
         OrderModel order = orderService.createDirectOrder(
                 item,
-                name,
-                phone,
-                address + ", " + city + " - " + pincode,
+                addressId,
                 paymentMethod
         );
 
