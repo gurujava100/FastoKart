@@ -19,6 +19,18 @@
         .address-box{border:1px solid #ddd;padding:12px;border-radius:10px;margin-top:10px}
         .change-btn{margin-top:10px;background:#eee;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
         .error{color:red;margin-top:10px}
+        .address-box{
+            border:1px solid #ddd;
+            padding:12px;
+            border-radius:10px;
+            margin-top:10px;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .address-box:hover{
+            border-color:#999;
+        }
     </style>
 </head>
 
@@ -127,7 +139,7 @@
                 list.forEach(addr => {
                     html += `
                     <div class="address-box" onclick="selectAddress(${addr.id})">
-                        <b>${addr.fullName}</b><br>
+                        <b>${addr.name}</b><br>
                         ${addr.state}, ${addr.city} - ${addr.pincode}<br>
                         ${addr.phone}
                     </div>
@@ -140,7 +152,15 @@
 
     function selectAddress(id){
         document.getElementById("selectedAddressId").value = id;
-        loadDefaultAddress(); // reload selected
+        //loadDefaultAddress(); // reload selected
+        document.querySelectorAll(".address-box").forEach(box => {
+            box.style.border = "1px solid #ddd";
+            box.style.background = "#fff";
+        });
+
+        // highlight selected one
+        element.style.border = "2px solid green";
+        element.style.background = "#f0fff0";
     }
 
 </script>
