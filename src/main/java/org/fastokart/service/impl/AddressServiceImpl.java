@@ -68,5 +68,46 @@ public class AddressServiceImpl implements AddressService {
 
         return AddressMapper.toDTO(address);
     }
+    @Override
+    public AddressResponseDTO getAddressById(Long id, Long userId) {
 
+        AddressModel address = addressRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        // 🔐 Security check
+        if (!address.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        return AddressMapper.toDTO(address);
+    }
+    @Override
+    public AddressResponseDTO updateAddress(Long id, AddressRequestDTO dto, Long userId) {
+
+        AddressModel address = addressRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        // 🔐 Security check
+        if (!address.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        // 🔥 Update existing entity
+        AddressMapper.updateEntity(address, dto);
+
+        addressRepository.save(address);
+
+        return AddressMapper.toDTO(address);
+    }
+    public void deleteAddress(Long addressId, Long userId) {
+
+        AddressModel address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        if (!address.getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not allowed to delete this address");
+        }
+
+        addressRepository.delete(address);
+    }
 }
