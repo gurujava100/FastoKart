@@ -27,7 +27,10 @@
             cursor:pointer;
             transition:0.2s;
         }
-
+        .address-box.selected{
+            border:2px solid #2874f0;   /* Flipkart blue */
+            background-color:#f0f5ff;
+        }
         .address-box:hover{
             border-color:#999;
         }
@@ -138,7 +141,7 @@
 
                 list.forEach(addr => {
                     html += `
-                    <div class="address-box" onclick="selectAddress(${addr.id})">
+                    <div class="address-box" onclick="selectAddress(this, ${addr.id})">
                         <b>${addr.name}</b><br>
                         ${addr.state}, ${addr.city} - ${addr.pincode}<br>
                         ${addr.phone}
@@ -150,17 +153,20 @@
             });
     }
 
-    function selectAddress(id){
-        document.getElementById("selectedAddressId").value = id;
-        //loadDefaultAddress(); // reload selected
-        document.querySelectorAll(".address-box").forEach(box => {
-            box.style.border = "1px solid #ddd";
-            box.style.background = "#fff";
-        });
 
-        // highlight selected one
-        element.style.border = "2px solid green";
-        element.style.background = "#f0fff0";
+    function selectAddress(element, addressId){
+
+        // remove selection from all
+        document.querySelectorAll('.address-box')
+            .forEach(box => box.classList.remove('selected'));
+
+        // add to clicked one
+        element.classList.add('selected');
+
+        // store selected id
+        selectedAddressId = addressId;
+
+        console.log("Selected Address:", selectedAddressId);
     }
 
 </script>

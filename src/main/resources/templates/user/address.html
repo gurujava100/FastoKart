@@ -153,7 +153,24 @@
             text-align: center;
             color: gray;
         }
+        .btn {
+            padding: 8px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            background: #eee;
+            color: black;
+            margin-right: 8px;
+        }
 
+        .btn.primary {
+            background: #2874f0;
+            color: white;
+        }
+
+        .btn.danger {
+            background: red;
+            color: white;
+        }
     </style>
 </head>
 
@@ -231,18 +248,17 @@
             </div>
 
             <div class="actions">
-                <button th:onclick="'location.href=\'/my-account/address/edit/' + ${addr.id} + '\''">
-                    EDIT
-                </button>
 
-                <button th:onclick="'location.href=\'/my-account/address/delete/' + ${addr.id} + '\''">
-                    DELETE
-                </button>
+                <a th:href="@{/my-account/address/edit/{id}(id=${addr.id})}">
+                    <button>EDIT</button>
+                </a>
 
-                <button class="deliver-btn"
-                        th:onclick="'location.href=\'/checkout?addressId=' + ${addr.id} + '\''">
-                    DELIVER HERE
-                </button>
+                <button th:onclick="'deleteAddress(' + ${addr.id} + ')'">DELETE</button>
+
+                <a th:href="@{/checkout(addressId=${addr.id})}">
+                    <button class="deliver-btn">DELIVER HERE</button>
+                </a>
+
             </div>
 
         </div>
@@ -250,6 +266,6 @@
     </div>
 
 </div>
-
+<script th:src="@{/js/address.js}"></script>
 </body>
 </html>

@@ -13,7 +13,12 @@ public interface AddressService {
     AddressResponseDTO getDefaultAddress(Long userId);
 
     AddressResponseDTO getAddressById(Long addressId);
-   // AddressResponseDTO updateAddress(Long id, AddressRequestDTO dto, User user);
+    AddressResponseDTO getAddressById(Long id, Long userId);
+    // ✏️ Update address (EDIT)
+    AddressResponseDTO updateAddress(Long id, AddressRequestDTO dto, Long userId);
+    void deleteAddress(Long addressId, Long userId);
+
+    // AddressResponseDTO updateAddress(Long id, AddressRequestDTO dto, User user);
 
   //  void deleteAddress(Long id, User user);
 

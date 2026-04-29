@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Address</title>
+    <style>
+        /* Page background */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f3f6;
+            margin: 0;
+        }
+
+        /* Container */
+        .container {
+            width: 420px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Heading */
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #212121;
+        }
+
+        /* Input fields */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border 0.2s;
+        }
+
+        /* Focus effect */
+        input[type="text"]:focus {
+            border-color: #2874f0;
+            outline: none;
+        }
+
+        /* Checkbox label */
+        label {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #fb641b;
+            border: none;
+            color: white;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Button hover */
+        button:hover {
+            background: #e55b17;
+        }
+
+        /* Small screen responsive */
+        @media (max-width: 500px) {
+            .container {
+                width: 90%;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Edit Address</h2>
+
+<div class="container">
+    <h2>Edit Address</h2>
+
+    <form id="editForm">
+
+        <input type="hidden" id="id" th:value="${address.id}" />
+
+        <input type="text" id="name" th:value="${address.name}" placeholder="Name" />
+        <input type="text" id="phone" th:value="${address.phone}" placeholder="Phone" />
+        <input type="text" id="pincode" th:value="${address.pincode}" placeholder="Pincode" />
+        <input type="text" id="city" th:value="${address.city}" placeholder="City" />
+        <input type="text" id="state" th:value="${address.state}" placeholder="State" />
+        <input type="text" id="fullAddress" th:value="${address.fullAddress}" placeholder="Full Address" />
+        <input type="text" id="landmark" th:value="${address.landmark}" placeholder="Landmark" />
+
+        <label>
+            <input type="checkbox" id="default"
+                   th:checked="${address.default}" />
+            Set as Default
+        </label>
+
+        <button type="button" onclick="updateAddress()">UPDATE</button>
+
+    </form>
+</div>
+<script>
+    function updateAddress() {
+
+        const id = document.getElementById("id").value;
+
+        const data = {
+            name: document.getElementById("name").value,
+            phone: document.getElementById("phone").value,
+            pincode: document.getElementById("pincode").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            fullAddress: document.getElementById("fullAddress").value,
+            landmark: document.getElementById("landmark").value,
+            default: document.getElementById("default").checked
+        };
+
+        fetch(`/my-account/address/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Update failed");
+                }
+                return response.json();
+            })
+            .then(result => {
+                alert("Address updated successfully!");
+                console.log("redirecting...");
+                window.location.replace("/my-account/updateaddress");
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Error updating address");
+            });
+    }
+</script>
+</body>
+</html>

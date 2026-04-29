@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -135,7 +132,11 @@ public class UserPageController {
     @GetMapping("/account/addresses")
     public String addressesPage(Model model, HttpSession session) {
        // UserModel user = (UserModel) session.getAttribute("user");
-        Long userId = (Long) session.getAttribute("userId");
+
+        System.out.println("👉 ADDRESS API CALLED");
+        System.out.println("Session ID (address): " + session.getId());
+        System.out.println("USER_ID from session: " + session.getAttribute("USER_ID"));
+        Long userId = (Long) session.getAttribute("USER_ID");
 
         if (userId == null) {
             return "redirect:/login";
@@ -148,4 +149,36 @@ public class UserPageController {
         model.addAttribute("addresses", addresses);
         return "user/address"; // Thymeleaf template name: address.html
     }
+    @GetMapping("/my-account/address/edit/{id}")
+    public String editAddress(@PathVariable Long id,
+                              Model model,
+                              HttpSession session) {
+        Long userId = (Long) session.getAttribute("USER_ID");
+
+        if (userId == null) {
+            return "redirect:/login"; // 🔐 session expired
+        }
+
+        AddressResponseDTO address = addressService.getAddressById(id, userId);
+
+        model.addAttribute("address", address);
+        return "user/edit-address";
+    }
+    @RequestMapping("/my-account/updateaddress")
+
+        @GetMapping
+        public String addressPage(Model model, HttpSession session) {
+
+            Long userId = (Long) session.getAttribute("USER_ID");
+
+            if (userId == null) {
+                return "redirect:/login";
+            }
+
+            model.addAttribute("addresses",
+                    addressService.getAllAddresses(userId));
+
+            return "user/address";
+        }
+
 }

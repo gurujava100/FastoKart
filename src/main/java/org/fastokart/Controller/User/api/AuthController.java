@@ -38,6 +38,8 @@ public class AuthController {
 
 
         UserModel user = userService.login(dto);
+        System.out.println("👉 LOGIN API CALLED");
+        System.out.println("Session ID (login): " + session.getId());
 
         Map<String, Object> resp = new HashMap<>();
 

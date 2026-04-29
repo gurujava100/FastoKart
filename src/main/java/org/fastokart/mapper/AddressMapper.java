@@ -35,4 +35,16 @@ public class AddressMapper {
 
         return dto;
     }
+    // UPDATE (🔥 IMPORTANT)
+    public static void updateEntity(AddressModel address, AddressRequestDTO dto) {
+        address.setName(dto.getName());
+        address.setPhone(dto.getPhone());
+        address.setPincode(dto.getPincode());
+        address.setCity(dto.getCity());
+        address.setState(dto.getState());
+        address.setFullAddress(dto.getFullAddress());
+        address.setLandmark(dto.getLandmark());
+        address.setDefault(dto.isDefault());
+    }
+
 }
