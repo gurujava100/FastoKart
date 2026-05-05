@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Orders</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background: #f4f6f9; }
+        .card { border-radius: 12px; }
+        .table td { vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">📦 All Orders</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Order</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody id="ordersTable">
+                <!-- Data from JS -->
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function loadOrders() {
+        fetch('/api/admin/orders')
+            .then(res => res.json())
+            .then(data => {
+
+                console.log("Orders:", data);
+
+                let table = document.getElementById("ordersTable");
+                table.innerHTML = "";
+
+                if (!Array.isArray(data)) {
+                    table.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Invalid Data</td></tr>`;
+                    return;
+                }
+
+                if (data.length === 0) {
+                    table.innerHTML = `<tr><td colspan="6" class="text-center">No Orders Found</td></tr>`;
+                    return;
+                }
+
+                data.forEach((order, index) => {
+
+                    let itemsTooltip = order.items
+                        ? order.items.map(i => i.productName + " x" + i.quantity).join(", ")
+                        : "";
+
+                    let row = `
+                <tr title="${itemsTooltip}">
+                    <td>${index + 1}</td>
+
+                    <td>
+                        <b>#ORD-${order.orderId}</b><br>
+                        <small class="text-muted">${formatDate(order.orderDate)}</small>
+                    </td>
+
+                    <td>
+                        <b>${order.customerName}</b><br>
+                        <small>${order.phone}</small>
+                    </td>
+
+                    <td>
+                        <span class="badge ${getStatusBadge(order.status)}">
+                            ${formatStatus(order.status)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <b>₹${order.totalAmount}</b><br>
+                        <small>${order.paymentMethod}</small>
+                    </td>
+
+                    <td>
+                        ${getActionButtons(order)}
+                    </td>
+                </tr>
+                `;
+
+                    table.innerHTML += row;
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById("ordersTable").innerHTML =
+                    `<tr><td colspan="6" class="text-danger text-center">Error loading orders</td></tr>`;
+            });
+    }
+
+    function getStatusBadge(status) {
+        switch(status) {
+            case "PLACED": return "bg-secondary";
+            case "CONFIRMED": return "bg-primary";
+            case "PACKED": return "bg-warning text-dark";
+            case "SHIPPED": return "bg-info text-dark";
+            case "OUT_FOR_DELIVERY": return "bg-dark";
+            case "DELIVERED": return "bg-success";
+            case "CANCELLED": return "bg-danger";
+            default: return "bg-light text-dark";
+        }
+    }
+
+    function formatStatus(status) {
+        return status.replaceAll("_", " ");
+    }
+
+    function formatDate(dateString) {
+        let date = new Date(dateString);
+        return date.toLocaleString();
+    }
+
+    function getActionButtons(order) {
+
+        switch(order.status) {
+
+            case "PLACED":
+                return `
+                <button class="btn btn-sm btn-primary mb-1"
+                    onclick="updateStatus(${order.orderId}, 'CONFIRMED')">Confirm</button>
+                <button class="btn btn-sm btn-danger"
+                    onclick="updateStatus(${order.orderId}, 'CANCELLED')">Cancel</button>
+            `;
+
+            case "CONFIRMED":
+                return `<button class="btn btn-sm btn-warning"
+                    onclick="updateStatus(${order.orderId}, 'PACKED')">Pack</button>`;
+
+            case "PACKED":
+                return `<button class="btn btn-sm btn-info"
+                    onclick="updateStatus(${order.orderId}, 'SHIPPED')">Ship</button>`;
+
+            case "SHIPPED":
+                return `<button class="btn btn-sm btn-secondary"
+                    onclick="updateStatus(${order.orderId}, 'OUT_FOR_DELIVERY')">Out</button>`;
+
+            case "OUT_FOR_DELIVERY":
+                return `<button class="btn btn-sm btn-success"
+                    onclick="updateStatus(${order.orderId}, 'DELIVERED')">Deliver</button>`;
+
+            default:
+                return `<span class="text-muted">No Action</span>`;
+        }
+    }
+
+    function updateStatus(orderId, status) {
+        fetch(`/api/admin/${orderId}/status?status=${status}`, {
+            method: 'PUT'
+        })
+            .then(res => res.text())
+            .then(msg => {
+                alert(msg);
+                loadOrders();
+            })
+            .catch(err => alert("Error updating status"));
+    }
+
+    // Load on page start
+    loadOrders();
+
+</script>
+
+</body>
+</html>

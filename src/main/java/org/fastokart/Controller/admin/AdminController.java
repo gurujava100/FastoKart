@@ -30,4 +30,8 @@ public class AdminController {
 
           return "admin/sub_category";
     }
+    @GetMapping("/orders")
+    public String ordersPage() {
+        return "admin/orders";
+    }
 }

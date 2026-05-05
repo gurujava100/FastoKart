@@ -21,21 +21,31 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressResponseDTO addAddress(AddressRequestDTO dto, Long userId) {
 
-        // 🔹 Create lightweight user object
         UserModel user = new UserModel();
         user.setId(userId);
 
         AddressModel address = AddressMapper.toEntity(dto, user);
 
-        // 🔥 RULE 1: First address → default
-        if (addressRepository.countByUser(user) == 0) {
+        long count = addressRepository.countByUser(user);
+
+        // 🔥 RULE 1: First address → always default
+        if (count == 0) {
             address.setDefault(true);
         }
 
-        // 🔥 RULE 2: If user selects default → reset old default
-        if (dto.isDefault()) {
+        // 🔥 RULE 2: User explicitly selects default
+        else if (dto.isDefault()) {
             addressRepository.resetDefaultAddresses(userId);
             address.setDefault(true);
+        }
+
+        // 🔥 RULE 3: SAFETY NET (very important)
+        else {
+            boolean hasDefault = addressRepository.existsByUserIdAndIsDefaultTrue(userId);
+
+            if (!hasDefault) {
+                address.setDefault(true); // 🔥 auto-fix missing default
+            }
         }
 
         AddressModel saved = addressRepository.save(address);

@@ -79,15 +79,32 @@
                         th:onclick="'buyProduct(' + ${product.id} + ')'">
                     Buy Now
                 </button>
+                <button id="wishlistBtn"
+                        class="btn btn-outline-danger"
+                        th:onclick="'toggleWishlist(' + ${product.id} + ')'">
+                    🤍
+                </button>
             </div>
 
             <p class="text-muted">Free delivery in 3-5 days.</p>
         </div>
     </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="wishlistToast" class="toast align-items-center text-bg-dark border-0">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">
+                    Product added
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+
+<script  th:inline="javascript">
     function addToCart(productId) {
         fetch('/api/cart/add?productId=' + productId, { method: 'POST' })
             .then(res => res.text())
@@ -108,6 +125,73 @@
                 const cartCount = document.getElementById('cartCount');
                 if(cartCount) cartCount.innerText = data.count;
             });
+    }
+    let inWishlist = false;
+
+    function toggleWishlist(productId) {
+
+        fetch('/api/wishlist/' + productId, {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                inWishlist = data.added;
+                updateWishlistUI();
+
+                // 🔥 SHOW TOAST
+                if (data.added) {
+                    showToast("❤️ Added to wishlist");
+                } else {
+                    showToast("❌ Removed from wishlist");
+                }
+            })
+            .catch(() => {
+                showToast("⚠️ Error updating wishlist");
+            });
+    }
+    function updateWishlistUI() {
+        const btn = document.getElementById("wishlistBtn");
+
+        if (inWishlist) {
+            btn.innerHTML = "❤️";
+            btn.classList.remove("btn-outline-danger");
+            btn.classList.add("btn-danger");
+        } else {
+            btn.innerHTML = "🤍";
+            btn.classList.remove("btn-danger");
+            btn.classList.add("btn-outline-danger");
+        }
+    }
+    function checkWishlist(productId) {
+
+        fetch('/api/wishlist/check/' + productId)
+            .then(res => res.json())
+            .then(data => {
+                inWishlist = data.inWishlist;
+                updateWishlistUI();
+            })
+            .catch(() => console.log("Wishlist check failed"));
+    }
+
+    // ✅ AUTO LOAD (THIS WAS MISSING)
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const productId = document.body.getAttribute("data-product-id");   // 🔥 Thymeleaf injects here
+
+        checkWishlist(productId);
+    });
+
+    function showToast(message) {
+
+        const toastEl = document.getElementById("wishlistToast");
+        const msg = document.getElementById("toastMessage");
+
+        msg.innerText = message;
+
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
     }
 </script>
 <script th:src="@{/js/product.js}"></script>
