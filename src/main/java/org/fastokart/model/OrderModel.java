@@ -2,6 +2,7 @@ package org.fastokart.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.fastokart.enm.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +20,7 @@ public class OrderModel {
     private String address;
 
     private String paymentMethod;   // COD / ONLINE
-    private String status;          // PLACED, PAID, SHIPPED
+   // private String status;          // PLACED, PAID, SHIPPED
 
     private Double totalAmount;
 
@@ -27,5 +28,7 @@ public class OrderModel {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItemModel> items;
-
+    private LocalDateTime deliveredAt;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.PLACED;
 }

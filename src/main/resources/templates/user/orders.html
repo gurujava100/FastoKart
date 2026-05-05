@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: Arial;
+        }
+
+        .order-container {
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .order-header {
+            background: #f7f7f7;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .order-body {
+            padding: 20px;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .delivered { background: #e6f4ea; color: #1e7e34; }
+        .shipped { background: #e7f1ff; color: #0b5ed7; }
+        .placed { background: #fff3cd; color: #856404; }
+        .cancelled { background: #fdecea; color: #d93025; }
+
+        .product-info {
+            display: flex;
+            gap: 15px;
+        }
+
+        .product-info img {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+        }
+
+        .product-name {
+            font-weight: bold;
+        }
+
+        .buy-again {
+            margin-top: 10px;
+            background: #ffd814;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin: auto;
+            margin-bottom: 5px;
+        }
+
+        .done { background: green; }
+        .pending { background: gray; }
+
+        .step small {
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="order-container">
+    <h3 class="mb-3">🛒 My Orders</h3>
+
+    <div id="orders"></div>
+</div>
+
+<script>
+
+    fetch('/api/orders/my-orders', {
+        method: "GET",
+        credentials: "include"
+    })
+        .then(res => res.json())
+        .then(data => {
+
+            const container = document.getElementById("orders");
+
+            if (!data || data.length === 0) {
+                container.innerHTML = "<p>No orders found</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+
+            data.forEach(order => {
+
+                const item = order.items && order.items.length > 0 ? order.items[0] : null;
+
+                container.innerHTML += `
+        <div class="order-card">
+
+            <div class="order-header">
+                <div>
+                    <div class="label">Order Placed</div>
+                    <div class="value">${formatDate(order.orderDate)}</div>
+                </div>
+
+                <div>
+                    <div class="label">Total</div>
+                    <div class="value">₹${order.totalAmount}</div>
+                </div>
+
+                <div>
+                    <div class="label">Order #</div>
+                    <div class="value">ORD-${order.orderId}</div>
+                </div>
+
+                <div>
+                    <a href="#">View Details</a>
+                </div>
+            </div>
+
+            <div class="order-body">
+
+                <div class="status-badge ${getStatusClass(order.status)}">
+                    ${formatStatus(order.status)}
+                </div>
+
+                <div class="product-info">
+                    <img src="${item && item.productImage ? item.productImage : 'https://via.placeholder.com/100'}">
+                    <div>
+                        <div class="product-name">${item ? item.productName : "No item"}</div>
+                        <div>Qty: ${item ? item.quantity : "-"}</div>
+                        <button class="buy-again">Buy it again</button>
+                    </div>
+                </div>
+
+                ${buildTimeline(order.status)}
+
+            </div>
+
+        </div>
+        `;
+            });
+
+        })
+        .catch(err => console.error(err));
+
+
+    function formatDate(date) {
+        return new Date(date).toLocaleDateString();
+    }
+
+    function formatStatus(status) {
+        return status.replaceAll("_", " ");
+    }
+
+    function getStatusClass(status) {
+        switch(status) {
+            case "DELIVERED": return "delivered";
+            case "SHIPPED": return "shipped";
+            case "OUT_FOR_DELIVERY": return "shipped";
+            case "PLACED": return "placed";
+            case "CONFIRMED": return "placed";
+            case "PACKED": return "placed";
+            case "CANCELLED": return "cancelled";
+            default: return "";
+        }
+    }
+
+    function buildTimeline(status) {
+
+        const steps = [
+            "PLACED",
+            "CONFIRMED",
+            "PACKED",
+            "SHIPPED",
+            "OUT_FOR_DELIVERY",
+            "DELIVERED"
+        ];
+
+        const currentIndex = steps.indexOf(status);
+
+        let html = `<div class="timeline">`;
+
+        steps.forEach((step, index) => {
+            const done = index <= currentIndex;
+
+            html += `
+            <div class="step">
+                <div class="circle ${done ? 'done' : 'pending'}"></div>
+                <small>${step.replaceAll('_',' ')}</small>
+            </div>
+        `;
+        });
+
+        html += `</div>`;
+
+        return html;
+    }
+
+</script>
+
+</body>
+</html>
